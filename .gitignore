@@ -1,0 +1,4 @@
+node_modules/
+dist/
+dudas.txt
+.github/workflows
