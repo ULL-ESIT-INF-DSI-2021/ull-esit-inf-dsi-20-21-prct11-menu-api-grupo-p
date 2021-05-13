@@ -1,9 +1,12 @@
 {
   "dependencies": {
+    "mongodb": "^3.6.6",
     "mongoose": "^5.12.8"
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
-    "express": "^4.17.1"
+    "@types/request": "^2.48.5",
+    "express": "^4.17.1",
+    "request": "^2.88.2"
   }
 }
