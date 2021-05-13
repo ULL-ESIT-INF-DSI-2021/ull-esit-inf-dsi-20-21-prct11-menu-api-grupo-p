@@ -9,7 +9,7 @@ import { Grupo } from "./alimento";
 export type Categoria = 'ENTRANTE' | 'PRIMERO' | 'SEGUNDO' | 'POSTRE';
 
 /*
- * Esta es la clase Plato.
+ * Esta es l a clase Plato.
  */
 export class Plato {
   /**

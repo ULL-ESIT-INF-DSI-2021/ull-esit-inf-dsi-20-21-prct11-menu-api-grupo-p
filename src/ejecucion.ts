@@ -3,55 +3,69 @@ import {MongoClient} from 'mongodb';
 import {Alimento} from './alimento';
 import {Plato} from './plato';
 import {Menu} from './menu';
-
+import {Categoria} from './plato';
 
 // http://localhost:3000/ingredients?cmd=read&nombre=piña&precio=3&origen=hawaii&calorias=100&macros=30&grupo=Fruta
+// http://localhost:3000/courses?cmd=create&nombre="arroz con leche"&alimentos="arroz, leche"&categoria="Postre"
 
+const dbURL = 'mongodb://127.0.0.1:27017';
+const dbName = 'LunaRosa-bbdd';
 
 function createSomething(path: string, data, db) {
-  switch (path) {
-    case 'ingredients':
-      console.log('Añadimos un ingrediente a la BBDD.');
-      console.log(`${path}`);
-      console.log(`${data.nombre}`);
-      db.collection(`${path}`).insertOne({
-        nombreAlimento: data.nombre,
-        precio: data.precio,
-        origen: data.origen,
-        calorias: data.calorias,
-        grupo: data.grupo,
-      }).then((result) => {
-        // console.log(result);
-      }).catch((error) => {
-        console.log(error);
-      });
-      break;
-    case 'courses':
-      console.log('Añadimos un plato nuevo a la BBDD.');
-      db.collection(`${path}`).insertOne({
-        nombrePlato: data.nombrePlato,
-        alimentos: data.alimentos,
-        categoria: data.categoria,
-      }).then((result) => {
-        // console.log(result); //ESTE
-      }).catch((error) => {
-        console.log(error);
-      });
-      break;
-    case 'menus':
-      console.log('Añadimos el menú a la BBDD');
-      db.collection(`${path}`).insertOne({
-        nombreMenu: data.nombreMenu,
-        platos: data.platos,
-      }).then((result) => {
-        // console.log(result); //ESTE
-      }).catch((error) => {
-        console.log(error);
-      });
-      break;
-    default:
-      break;
-  }
+  MongoClient.connect(dbURL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }, (error, client) => {
+    if (error) {
+      console.log(`Unable to connect to database: ${error.message}`);
+    } else {
+      const db = client.db(dbName);
+      console.log(db.databaseName);
+      switch (path) {
+        case 'ingredients':
+          console.log('Añadimos un ingrediente a la BBDD.');
+          db.collection(`${path}`).insertOne({
+            nombreAlimento: data.nombre,
+            precio: data.precio,
+            origen: data.origen,
+            calorias: data.calorias,
+            grupo: data.grupo,
+          }).then((result) => {
+            // console.log(result);
+          }).catch((error) => {
+            console.log(error);
+          });
+          break;
+        case 'courses':
+          console.log('Añadimos un plato nuevo a la BBDD.');
+          db.collection(`${path}`).insertOne({
+            nombrePlato: data.nombre,
+            alimentos: data.alimentos,
+            categoria: data.categoria,
+          }).then((result) => {
+            // console.log(result);
+          }).catch((error) => {
+            console.log(error);
+          });
+          break;
+        case 'menus':
+          console.log('Añadimos el menú a la BBDD');
+          db.collection(`${path}`).insertOne({
+            nombreMenu: data.nombreMenu,
+            platos: data.platos,    // ajustar qué cosa exactamente está
+          }).then((result) => {
+            // console.log(result);
+          }).catch((error) => {
+            console.log(error);
+          });
+          break;
+        default:
+          break;
+      }
+    }
+  });
+
+  
 }
 
 function readSomething(path: string, data, db) {
@@ -103,7 +117,8 @@ function deleteSomething(path: string, data, db) {
   }
 }
 
-function appInitialization(db) {
+function appInitialization() {
+  const db = '';
   const app = express();
   app.get('/ingredients', (request, response) => {
     if (request.query.cmd.length === 0) {
@@ -137,6 +152,7 @@ function appInitialization(db) {
   });
 
   app.get('/courses', (request, response) => {
+    console.log(`${request.query.cmd}`);
     if (request.query.cmd.length === 0) {
       response.send('Se muestran todos los Platos');
     } else {
@@ -171,25 +187,26 @@ function appInitialization(db) {
     if (request.query.cmd.length === 0) {
       response.send('Se muestran todos los Platos');
     } else {
+      const menu = 'menu';
       switch (request.query.cmd) {
         case 'create':
-          createSomething('menus', request.query, db);
+          createSomething(menu, request.query, db);
           response.send('Se ha creado y añadido el nuevo menú.');
           // código para crear un nuevo ingrediente en la BBDD (puede fallar)
           break;
         case 'read':
           // código para comprobar si podemos leer el ingrediente solicitado (puede fallar)
-          readSomething('menus', request.query, db);
+          readSomething(menu, request.query, db);
           response.send('Datos leídos correctamente: ');
           break;
         case 'update':
           // código para modificar el ingrediente. (puede fallar)
-          updateSomething('menus', request.query, db);
+          updateSomething(menu, request.query, db);
           response.send('Datos modificados correctamente');
           break;
         case 'delete':
           // código para borrar un ingrediente de la BBDD. (puede fallar)
-          deleteSomething('menus', request.query, db);
+          deleteSomething(menu, request.query, db);
           response.send('Datos borrados correctamente.');
           break;
         default:
@@ -209,6 +226,9 @@ function appInitialization(db) {
   });
 }
 
+appInitialization();
+
+/*
 const dbURL = 'mongodb://127.0.0.1:27017';
 const dbName = 'LunaRosa-bbdd';
 
@@ -221,7 +241,19 @@ MongoClient.connect(dbURL, {
   } else {
     const db = client.db(dbName);
     console.log(db.databaseName);
-    appInitialization(db);
+    
+    db.collection(`${path}`).insertOne({
+      nombreAlimento: data.nombre,
+      precio: data.precio,
+      origen: data.origen,
+      calorias: data.calorias,
+      grupo: data.grupo,
+    }).then((result) => {
+      // console.log(result);
+    }).catch((error) => {
+      console.log(error);
+    });
+    
   }
 });
-
+*/
