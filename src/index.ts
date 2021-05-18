@@ -1,15 +1,44 @@
 import express = require('express');
+import * as mongoose from 'mongoose';
+// import {Grupo} from './models/alimento';
 import {MongoClient} from 'mongodb';
-import {Alimento} from './alimento';
-import {Plato} from './plato';
-import {Menu} from './menu';
-import {Categoria} from './plato';
+import {alimentoModel} from './models/alimento';
+import {Plato} from './models/plato';
+import {Categoria} from './models/plato';
+import {menuModel} from './models/menu';
+
 
 // http://localhost:3000/ingredients?cmd=read&nombre=piña&precio=3&origen=hawaii&calorias=100&macros=30&grupo=Fruta
 // http://localhost:3000/courses?cmd=create&nombre="arroz con leche"&alimentos="arroz, leche"&categoria="Postre"
 
+/**
+ *  const app = express();
+    app.use(express.json());
+    app.use(postRouter);
+    app.use(getRouter);
+    app.use(patchRouter);
+    app.use(deleteRouter);
+    app.use(defaultRouter);
+
+    const port = process.env.PORT || 3000;
+
+    app.listen(port, () => {
+      console.log(`Server is up on port ${port}`);
+    });
+ */
+
 const dbURL = 'mongodb://127.0.0.1:27017';
 const dbName = 'LunaRosa-bbdd';
+
+mongoose.connect(`${dbURL}/${dbName}`, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+}).then(() => {
+  console.log('Connected to the database.');
+}).catch(() => {
+  console.log('Something went wrong when conecting to the database.');
+});
 
 function createSomething(path: string, data, db) {
   MongoClient.connect(dbURL, {
@@ -63,26 +92,60 @@ function createSomething(path: string, data, db) {
           break;
       }
     }
-  });
-
-  
+  });  
 }
 
 function readSomething(path: string, data, db) {
   // console.log(`Comando: ${data.cmd}, Nombre: ${data.nombre}, Grupo: ${data.grupo}`);
-  switch (path) {
-    case 'ingredients':
-      console.log('Leemos el ingrediente de la BBDD');
-      break;
-    case 'courses':
-      console.log('Leemos el plato de la BBDD');
-      break;
-    case 'menus':
-      console.log('Leemos el menú de la BBDD');
-      break;
-    default:
-      break;
-  }
+  
+  MongoClient.connect(dbURL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }, (error, client) => {
+    if (error) {
+      console.log(`Unable to connect to database: ${error.message}`);
+    } else {
+      const db = client.db(dbName);
+      console.log(db.databaseName);
+      switch (path) {
+        case 'ingredients':
+          console.log('Leemos un ingrediente de la BBDD.');
+          db.collection(`${path}`).findOne({
+            nombreAlimento: new String(data.nombre), //??
+          }).then((result) => {
+            console.log('Obtenido ingrediente: ' + result);
+          }).catch((error) => {
+            console.log(error);
+          });
+          break;
+        case 'courses':
+          console.log('Leemos un plato de la BBDD.');
+          db.collection(`${path}`).findOne({
+            nombrePlato: new String(data.nombre),
+            categoria: new String(data.categoria),
+          }).then((result) => {
+            // console.log(result);
+          }).catch((error) => {
+            console.log(error);
+          });
+          break;
+        case 'menus':
+          console.log('Leemos un menú de la BBDD');
+          db.collection(`${path}`).findOne({
+            nombreMenu: new String(data.nombreMenu),
+            //platos: data.platos,    // ajustar qué cosa exactamente está
+          }).then((result) => {
+            // console.log(result);
+          }).catch((error) => {
+            console.log(error);
+          });
+          break;
+        default:
+          break;
+      }
+    }
+  });
+
 }
 
 function updateSomething(path: string, data, db) {
@@ -102,19 +165,55 @@ function updateSomething(path: string, data, db) {
 }
 
 function deleteSomething(path: string, data, db) {
-  switch (path) {
-    case 'ingredients':
-      console.log('Eliminamos el ingrediente de la BBDD');
-      break;
-    case 'courses':
-      console.log('Eliminamos el plato de la BBDD');
-      break;
-    case 'menus':
-      console.log('Eliminamos el menú de la BBDD');
-      break;
-    default:
-      break;
-  }
+   
+  MongoClient.connect(dbURL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }, (error, client) => {
+    if (error) {
+      console.log(`Unable to connect to database: ${error.message}`);
+    } else {
+      const db = client.db(dbName);
+      console.log(db.databaseName);
+      switch (path) {
+        case 'ingredients':
+          console.log('Borrado un ingrediente de la BBDD.');
+          db.collection(`${path}`).findOne({
+            nombreAlimento: new String(data.nombre), //??
+          }).then((result) => {
+            console.log('Borrado ingrediente: ');
+          }).catch((error) => {
+            console.log(error);
+          });
+          break;
+        case 'courses':
+          console.log('Borrado un plato de la BBDD.');
+          db.collection(`${path}`).findOne({
+            nombrePlato: new String(data.nombre),
+            categoria: new String(data.categoria),
+          }).then((result) => {
+            // console.log(result);
+          }).catch((error) => {
+            console.log(error);
+          });
+          break;
+        case 'menus':
+          console.log('Borrado un menú de la BBDD');
+          db.collection(`${path}`).findOne({
+            nombreMenu: new String(data.nombreMenu),
+            //platos: data.platos,    // ajustar qué cosa exactamente está
+          }).then((result) => {
+            // console.log(result);
+          }).catch((error) => {
+            console.log(error);
+          });
+          break;
+        default:
+          break;
+      }
+    }
+  });
+
 }
 
 function appInitialization() {

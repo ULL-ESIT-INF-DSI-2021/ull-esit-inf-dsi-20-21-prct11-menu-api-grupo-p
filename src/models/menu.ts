@@ -1,3 +1,4 @@
+import * as mongoose from 'mongoose';
 import { Alimento } from "./alimento";
 import { Macronutrientes } from "./alimento"
 import { Grupo } from "./alimento";
@@ -106,3 +107,19 @@ export class Menu {
     return precioTotal;
   }
 }
+
+const menuSchema = new mongoose.Schema({
+  nombreMenu: {
+    type: String,
+    required: true,
+  },
+  primerPlato: {
+    type: Plato,
+    required: true,
+  },
+  demasPlatos: {
+    type: Plato,
+  },
+});
+
+export const menuModel = mongoose.model<Menu>('Menu', menuSchema);

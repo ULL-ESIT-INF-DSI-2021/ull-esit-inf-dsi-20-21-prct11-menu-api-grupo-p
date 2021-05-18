@@ -1,3 +1,4 @@
+import * as mongoose from 'mongoose';
 /**
  * Tipo de datos Macronutrientes. Servirá como composición nutricional de los alimentos.
  * @param carbohidratos Cantidad de hidratos de carbono por cada 100 gr que posee el alimento.
@@ -81,3 +82,48 @@ export class Alimento {
     return this.grupo;
   }
 }
+
+const alimentoSchema = new mongoose.Schema({
+  nombreAlimento: {
+    type: String,
+    required: true,
+  },
+  precio: {
+    type: Number,
+    required: true,
+  },
+  origen: {
+    type: String,
+    required: true,
+  },
+  calorias: {
+    type: Number,
+    required: true,
+  },
+  macros: {
+    type: String, //falta añadir el type de Macronutrientes
+  },
+  grupo: {
+    type: String,
+    required: true,
+    enum: ['CARNES', 'PESCADOS', 'HUEVOS', 'TOFU', 'FRUTOS_SECOS', 'SEMILLAS', 'LEGUMBRES',
+    'VERDURAS', 'HORTALIZAS', 'LACTEOS', 'CEREALES', 'FRUTAS', 'PROCESADOS'],
+  },
+});
+
+export const alimentoModel = mongoose.model<Alimento>('Alimento', alimentoSchema);
+/*
+const piña = new Alimentos({
+  nombreAlimento: 'Piña',
+  precio: 1,
+  origen: 'Caribe',
+  calorias: 100,
+  macros: 'algo',
+  grupo: 'FRUTAS',
+}); 
+piña.save().then((result) => {
+  console.log(result);
+}).catch((error) => {
+  console.log(error);
+});
+*/

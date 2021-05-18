@@ -1,3 +1,4 @@
+import * as mongoose from 'mongoose';
 import { Alimento } from "./alimento";
 import { Macronutrientes } from "./alimento"
 import { Grupo } from "./alimento";
@@ -186,3 +187,22 @@ export class Plato {
     });
   }
 }
+
+const platoSchema = new mongoose.Schema({
+  nombrePlato: {
+    type: String,
+    required: true,
+  },
+  alimentos: {
+    type: Alimento,
+    required: true,
+  },
+  categoria: {
+    type: String,
+    required: true,
+    enum: ['ENTRANTE', 'PRIMERO', 'SEGUNDO', 'POSTRE'],
+  },
+  // faltan: macronutrientes_plato y precio, que se calculas sumando esos valores de los alimentos
+});
+
+export const platoModel = mongoose.model<Plato>('Plato', platoSchema);

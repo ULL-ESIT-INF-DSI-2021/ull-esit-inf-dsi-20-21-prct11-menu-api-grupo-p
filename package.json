@@ -1,7 +1,14 @@
 {
+  "name": "ull-esit-inf-dsi-20-21-prct11-menu-api-grupo-p",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsc-watch --onSuccess \"node dist/index.js\""
+  },
   "dependencies": {
     "mongodb": "^3.6.6",
-    "mongoose": "^5.12.8"
+    "mongoose": "^5.12.9"
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
