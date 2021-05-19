@@ -112,14 +112,28 @@ const menuSchema = new mongoose.Schema({
   nombreMenu: {
     type: String,
     required: true,
+    trim: true,
+    validate: (value: string) => {
+      if (!value.match(/^[A-ZñÑ][a-zA-ZñÑ ]*$/)) {
+        throw new Error('El nombre de los menús tiene que empezar con una mayúscula y solo pueden estar formados por letras.');
+      }
+    },
   },
-  primerPlato: {
-    type: Plato,
+  arrayPlatos: {
+    type: String,
     required: true,
+    trim: true,
+    validate: (value: string) => {
+      if (!value.match(/^[A-ZñÑ][a-zA-ZñÑ ]*$/)) {
+        throw new Error('Los platos tienen que empezar con una mayúscula y solo pueden estar formados por letras.');
+      }
+    },
   },
-  demasPlatos: {
-    type: Plato,
-  },
+  precio: {
+    type: Number,
+    required: true,
+    trim: true,
+  }
 });
 
-export const menuModel = mongoose.model<Menu>('Menu', menuSchema);
+export const menuModel = mongoose.model<Menu>('menus', menuSchema);

@@ -87,43 +87,52 @@ const alimentoSchema = new mongoose.Schema({
   nombreAlimento: {
     type: String,
     required: true,
+    trim: true,
+    validate: (value: string) => {
+      if (!value.match(/^[A-ZñÑ][a-zA-ZñÑ ]*$/)) {
+        throw new Error('El nombre de los alimentos tiene que empezar con una mayúscula y solo pueden estar formados por letras.');
+      }
+    },
   },
+  
   precio: {
     type: Number,
     required: true,
+    trim: true,
   },
   origen: {
     type: String,
     required: true,
+    trim: true,
+    validate: (value: string) => {
+      if (!value.match(/^[A-ZñÑ][a-zA-ZñÑ ]*$/)) {
+        throw new Error('El origen de los alimentos tiene que empezar con una mayúscula y solo pueden estar formados por letras.');
+      }
+    },
   },
   calorias: {
     type: Number,
     required: true,
+    trim: true,
   },
   macros: {
-    type: String, //falta añadir el type de Macronutrientes
+    type: String, // falta añadir el type de Macronutrientes
+    trim: true,   // permite eliminar espacios al final y al principio de un string
+    /*
+    validate: (value: string) => {
+      if (!value.match(/^[carbohidratos]$/)) {
+        throw new Error('El origen de los alimentos tiene que empezar con una mayúscula y solo pueden estar formados por letras.');
+      }
+    },
+    */
   },
   grupo: {
     type: String,
     required: true,
+    trim: true,
     enum: ['CARNES', 'PESCADOS', 'HUEVOS', 'TOFU', 'FRUTOS_SECOS', 'SEMILLAS', 'LEGUMBRES',
     'VERDURAS', 'HORTALIZAS', 'LACTEOS', 'CEREALES', 'FRUTAS', 'PROCESADOS'],
   },
 });
 
-export const alimentoModel = mongoose.model<Alimento>('Alimento', alimentoSchema);
-/*
-const piña = new Alimentos({
-  nombreAlimento: 'Piña',
-  precio: 1,
-  origen: 'Caribe',
-  calorias: 100,
-  macros: 'algo',
-  grupo: 'FRUTAS',
-}); 
-piña.save().then((result) => {
-  console.log(result);
-}).catch((error) => {
-  console.log(error);
-});
-*/
+export const alimentoModel = mongoose.model<Alimento>('ingredients', alimentoSchema);

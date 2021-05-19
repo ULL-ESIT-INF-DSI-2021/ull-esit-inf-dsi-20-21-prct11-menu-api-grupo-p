@@ -192,10 +192,21 @@ const platoSchema = new mongoose.Schema({
   nombrePlato: {
     type: String,
     required: true,
+    trim: true,
+    validate: (value: string) => {
+      if (!value.match(/^[A-ZñÑ][a-zA-ZñÑ ]*$/)) {
+        throw new Error('El nombre del plato tiene que empezar con una mayúscula y solo pueden estar formados por letras.');
+      }
+    },
   },
   alimentos: {
-    type: Alimento,
+    type: String,
     required: true,
+    validate: (value: string) => {
+      if (!value.match(/^[A-ZñÑ][a-zA-ZñÑ ]*$/)) {
+        throw new Error('Los alimentos del plato tienen que empezar con una mayúscula y solo pueden estar formados por letras.');
+      }
+    },
   },
   categoria: {
     type: String,
@@ -205,4 +216,4 @@ const platoSchema = new mongoose.Schema({
   // faltan: macronutrientes_plato y precio, que se calculas sumando esos valores de los alimentos
 });
 
-export const platoModel = mongoose.model<Plato>('Plato', platoSchema);
+export const platoModel = mongoose.model<Plato>('courses', platoSchema);
