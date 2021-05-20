@@ -31,50 +31,46 @@ platoRouter.get('/courses/:id', async (req, res) => {
 
 // Patch por ID
 platoRouter.patch('/courses/:id', async (req, res) => {
-    const allowedUpdates = ['nombrePlato', 'precio', 'origen', 'calorias', 'macros', 'grupos'];
-    const actualUpdates = Object.keys(req.body);
-    const isValidUpdate = 
-        actualUpdates.every((update) => allowedUpdates.includes(update));
-  
-    if (!isValidUpdate) {
-      return res.status(400).send({
-        error: 'Update is not permitted',
-      });
-    }
-  
-    try {
-      const platos = await platoModel.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true,
-      });
-  
-      if (!platos) {
-        return res.status(404).send();
-      }
-  
-      return res.send(platos);
-    } catch (error) {
-      return res.status(400).send(error);
-    }
-  });
+  const allowedUpdates = ['nombrePlato', 'precio', 'origen', 'calorias', 'macros', 'grupos'];
+  const actualUpdates = Object.keys(req.body);
+  const isValidUpdate = 
+      actualUpdates.every((update) => allowedUpdates.includes(update));
 
+  if (!isValidUpdate) {
+    return res.status(400).send({
+      error: 'Update is not permitted',
+    });
+  }
 
+  try {
+    const platos = await platoModel.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!platos) {
+      return res.status(404).send();
+    }
+    return res.send(platos);
+  } catch (error) {
+    return res.status(400).send(error);
+  }
+});
 
 // para crearlos, post o put
 platoRouter.post('/courses', async (req, res) => {
-    const Plato = new platoModel(req.body);
-    try {
-      await Plato.save();
-      res.status(201).send(Plato);
-    } catch (error) {
-      res.status(400).send(error);
-    }
-  });
-  
+  const Plato = new platoModel(req.body);
+  try {
+    await Plato.save();
+    //
+    res.status(201).send(Plato);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
 
 // para modificarlos, path o put nombrePlato
 platoRouter.patch('/courses', async (req, res) => {
-  console.log(req.body.nombrePlato);
   if (!req.body.nombrePlato) {
     return res.status(400).send({
       error: 'An ingredient must be provided',
@@ -101,19 +97,14 @@ platoRouter.patch('/courses', async (req, res) => {
     if (!platos) {
       return res.status(404).send();
     }
-
     return res.send(platos);
   } catch (error) {
     return res.status(400).send(error);
   }
-
-
-    
 });
 
 // para eliminarlos, delete
 platoRouter.delete('/courses', async (req, res) => {
-  console.log(`${req.body.nombrePlato}`);
   if (!req.body.nombrePlato) {
     console.log(req.body.nombrePlato);
     return res.status(400).send({

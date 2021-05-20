@@ -2,8 +2,10 @@ import * as mongoose from 'mongoose';
 import { Alimento } from "./alimento";
 import { Macronutrientes } from "./alimento"
 import { Grupo } from "./alimento";
+import { macronutrientesSchema } from "./alimento";
 import { Plato } from "./plato";
 import { Categoria } from "./plato";
+import { platoSchema } from "./plato";
 
 /*
  * Esta es la clase Menu.
@@ -83,12 +85,9 @@ export class Menu {
   getGruposAlimentos(): Grupo[] {
     let arrayGruposAlimentos: Grupo[] = [];
     let platosGrupo: [Alimento, number][] = [];
-    //let valorGrupo: any;
     this.arrayPlatos.forEach((cadaPlato) => {
       cadaPlato.getAlimentos().forEach((cadaAlimento) => {
         arrayGruposAlimentos.push(cadaAlimento[0].getGrupo());
-        //valorGrupo = alimento[0].getGrupo();
-        //arrayGruposAlimentos[valorGrupo] = 1 + (arrayGruposAlimentos[valorGrupo] || 0)
       });;
     });
     const arrayFinal: Grupo[] = arrayGruposAlimentos.filter((n, i) => arrayGruposAlimentos.indexOf(n) === i);
@@ -120,18 +119,12 @@ const menuSchema = new mongoose.Schema({
     },
   },
   arrayPlatos: {
-    type: String,
+    type: [platoSchema],
     required: true,
     trim: true,
-    validate: (value: string) => {
-      if (!value.match(/^[A-ZñÑ][a-zA-ZñÑ ]*$/)) {
-        throw new Error('Los platos tienen que empezar con una mayúscula y solo pueden estar formados por letras.');
-      }
-    },
   },
   precio: {
     type: Number,
-    required: true,
     trim: true,
   }
 });

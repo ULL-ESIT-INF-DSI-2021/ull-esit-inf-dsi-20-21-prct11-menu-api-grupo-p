@@ -2,6 +2,8 @@ import * as mongoose from 'mongoose';
 import { Alimento } from "./alimento";
 import { Macronutrientes } from "./alimento"
 import { Grupo } from "./alimento";
+import { alimentoSchema } from "./alimento";
+import { macronutrientesSchema } from "./alimento";
 
 /**
  * Tipo de datos Categoria. Existen 4 categorías posibles: Entrante, 
@@ -188,7 +190,7 @@ export class Plato {
   }
 }
 
-const platoSchema = new mongoose.Schema({
+export const platoSchema = new mongoose.Schema({
   nombrePlato: {
     type: String,
     required: true,
@@ -200,20 +202,25 @@ const platoSchema = new mongoose.Schema({
     },
   },
   alimentos: {
-    type: String,
+    type: [alimentoSchema],
     required: true,
-    validate: (value: string) => {
-      if (!value.match(/^[A-ZñÑ][a-zA-ZñÑ ]*$/)) {
-        throw new Error('Los alimentos del plato tienen que empezar con una mayúscula y solo pueden estar formados por letras.');
-      }
-    },
   },
   categoria: {
     type: String,
     required: true,
     enum: ['ENTRANTE', 'PRIMERO', 'SEGUNDO', 'POSTRE'],
   },
-  // faltan: macronutrientes_plato y precio, que se calculas sumando esos valores de los alimentos
+  macronutrientes_plato: {
+    type: macronutrientesSchema,
+  },
+  precio: {
+    type: Number,
+    /*
+    validate: () => {
+      console.log('Precio');
+    }
+    */
+  },
 });
 
 export const platoModel = mongoose.model<Plato>('courses', platoSchema);

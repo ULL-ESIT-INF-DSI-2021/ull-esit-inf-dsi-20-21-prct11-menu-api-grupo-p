@@ -83,7 +83,9 @@ export class Alimento {
   }
 }
 
-const alimentoSchema = new mongoose.Schema({
+export const macronutrientesSchema = new mongoose.Schema({ carbohidratos: Number, proteinas: Number, lipidos: Number});
+
+export const alimentoSchema = new mongoose.Schema({
   nombreAlimento: {
     type: String,
     required: true,
@@ -94,7 +96,6 @@ const alimentoSchema = new mongoose.Schema({
       }
     },
   },
-  
   precio: {
     type: Number,
     required: true,
@@ -116,15 +117,8 @@ const alimentoSchema = new mongoose.Schema({
     trim: true,
   },
   macros: {
-    type: String, // falta añadir el type de Macronutrientes
+    type: macronutrientesSchema,
     trim: true,   // permite eliminar espacios al final y al principio de un string
-    /*
-    validate: (value: string) => {
-      if (!value.match(/^[carbohidratos]$/)) {
-        throw new Error('El origen de los alimentos tiene que empezar con una mayúscula y solo pueden estar formados por letras.');
-      }
-    },
-    */
   },
   grupo: {
     type: String,
