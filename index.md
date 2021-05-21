@@ -104,11 +104,25 @@ export const alimentoSchema = new mongoose.Schema({
   },
 });
 
+```
+
+Donde definimos el esquema de la clase, esto es el mecanismo por el cual podemos modelar un objeto en Mongoose. Basicamente con este codigo especificamos que el objeto alimentoSchema defina las cualidades del nombre del ingrediente, el precio , las calorias, el grupo y los macronutrientes que a su vez esta definido por macronutrientesSchema que define carbohidratos, proteinas y lipidos.
+
+Y en la ultima linea, aplicamos el metodo model que va a especificar el esquema que debe seguir los objetos antes de ser insertados en una coleccion de la base de datos.
+
+
+```Typescript
 export const alimentoModel = mongoose.model<Alimento>('ingredients', alimentoSchema);
 
 ```
 
-Donde definimos el esquema de la clase, esto es el mecanismo por el cual podemos modelar un objeto en Mongoose. Basicamente con este codigo especificamos que el objeto alimentoSchema defina las cualidades del nombre del ingrediente, el precio , las calorias los macronutrientes que a su vez esta definido por macronutrientesSchema que es 
+(Hay que extender un poco más esta idea) --> explicar als expresiones regulares
+
+
+En la ruta `src/routers/ingredientsRouter.ts` especificamos las funciones get, post, patch, delete encargadas de leer, añadir, modifciar y eliminar alimentos basados en el esquema anterior, por ello importamos el `models/alimento.ts`a este fichero y especificamos las acciones que realizará.
+
+- Con get: 
+- Con Delete:
 
 ### 2.2.Clase Platos. <a name="id22"></a>
 
@@ -131,25 +145,15 @@ Donde definimos el esquema de la clase, esto es el mecanismo por el cual podemos
 
 ## 3. Dificultades. <a name="id3"></a>
 
-A lo largo de la práctica, nos han surgido diferentes dudas o errores que hemos ido solucionando de mutuo acuerdo. 
-
-Comenzando por el principio, lo primero que hicimos fue plantear la jerarquía de clases y qué atributos tendría cada una (de manera estimada).
-
-Sin embargo, las partes más complejas comenzaron en la clase `Plato`. Las funciones de `calculo` son un poquito más complejas que un simple *getter*, con la excepción de `calculoGrupoPredominante()`, que no es difícil en sí, pero supone un bloque grande de código que hemos tenido que trabajar para obtener un solo dato, pero de manera precisa y más o menos óptima. 
-
-La siguiente parte que nos dio problemas fue el **deshacer los guardianes de tipos** de para algunas funciones. Primeramente con fallos de compilador y luego con fallos durante la ejecución, los métodos `search` no funcionaban bien en un principio porque el compilador no era capaz de separar correctamente los objetos `Menu` y `Plato`. Probamos varias opciones que encontramos por internet, pero al final lo mejor resultó ser la que aparece en los apuntes: usar `instanceof`. 
-
-Durante la creación de la clase `Comanda`, se nos planteó la duda de si un cliente solicitaba un producto de la carta, y daba la casualidad que habían varios de ellos con un nombre similar (por ejemplo, diferentes carnes o verduras *a la **barbacoa***), lo cual implicaba que se le sumaban todas esas coincidencias a su comanda. Nuestra forma de aplacar este problema es la de mostrar todas las opciones y preguntar al cliente cuáles quiere. Para ello hemos hecho uso del módulo/interfaz `readline` que nos permite trabajar con la terminal y permitir al cliente realizar su orden correctamente. 
-
-El fichero `bbdd.ts` es la parte que más problemas nos ha dado. Para todos no es nuevo trabajar con `inquirer` y `lowdb`, lo cual ha supuesto bastante prueba y error (de compilación) con los ejemplos que hemos seguido. 
-
-Al final hemos conseguido crear una estructura de menús con `inquirer`, con lo que nos quedamos satisfechos. Sin embargo, no hemos conseguido hacer funcionar el módulo **lowdb**. Hemos consultado la referencia del libro y ejemplos en internet. Entendemos su cometido, pero a nivel de código no lo hemos podido llevar a cabo. 
+EL issue al profesor
+la nomenclatura en el body de la base de datos a la hora de crear datos 
+HEROKU no quiere funcionar 
 
 <br/><br/>
 
 ## 4. Conclusión. <a name="id4"></a>
 
-Los objetivos que hemos cumplido satisfactoriamente sobre esta práctica han sido: crear una estructura de Menú usando los módulos Inquirer.js y Lowdb sobre un grupo de objetos en Typescript.
+Los objetivos que hemos cumplido satisfactoriamente sobre esta práctica han sido: crear una API, estructura de Menú usando los módulos Inquirer.js y Lowdb sobre un grupo de objetos en Typescript.
 
 Es decir, hemos aplicado un buen diseño de las clases solicitadas en el guión y respetando los principios SOLID. Con ello, conseguimos que la información que contiene cada clase esté bien ordenada y tenga sentido, en un entorno práctico.
 
@@ -157,9 +161,9 @@ Hemos realizado las pruebas según la metodología TDD: primero creando las func
 
 Por último, ha sido nuestro primer contacto con **Inquirer.js** y **Lowdb**. Nos ha costado hacer que los ejemplos no den errores de compilación y que nuestras implementaciones funcionen correctamente.
 
-**Inquirer.js** nos ha enseñado a crear Menús intuitivos para el usuario, ofreciendo unas opciones fijas y muy claras para el usuario.
+**MongoDB** nos ha enseñado a crear Menús intuitivos para el usuario, ofreciendo unas opciones fijas y muy claras para el usuario.
 
-**Lowdb** nos permite almacenar los datos de objetos en un fichero JSON para poder leer esos datos más adelante, incluso en otra ejecución desde cero del mismo programa.
+**Mongoose** nos permite almacenar los datos de objetos en un fichero JSON para poder leer esos datos más adelante, incluso en otra ejecución desde cero del mismo programa.
 
 <br/><br/>
 
