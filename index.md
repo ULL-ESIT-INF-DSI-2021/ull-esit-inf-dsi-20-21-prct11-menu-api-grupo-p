@@ -19,6 +19,8 @@
       2.1. [Clase Alimentos.](#id21)
       2.2. [Clase Plato.](#id22)
       2.3. [Clase Menú](#id23)
+      2.4. [Mongoose](#id24)
+      2.5. [MongoDB](#id25)
 
 3. [Desarrollo](#id3)
 
@@ -43,6 +45,87 @@ El objetivo de esta práctica es implementar de forma grupal una API haciendo us
 
 ## 2. Ejercicio. <a name="id2"></a>
 
+Para este ejercicio hemos utilizado las diferentes clases que hemos implementado en la primera práctica grupal, modificando las mismas para que acepten los métodos http que permitirán añadir, eliminar, modificar y leer objetos pertenecientes a cada clase, por lo que hemos dedicido reutilizar `alimento.ts`, `plato.ts` y `menu.ts`, desechando el resto de clases como `carta.ts` y `comanda.ts`puesto que no se hara uso de las mismas.
+
+Además, se hace uso de Moongose para implementar la base de datos que contendrá los objetos de cada clase, con **ThunderClient** podremos administrar las operaciones que se realizarán, luego **MongoDB Atlas** nos permitirá utilizar la Base de datos alojada en la nube y finalmente **Heroku** publica este servicio.
+
+Por lo que será necesario dividir la carpeta `src` en varias subcarpetas. Una de ellas es `models` donde se encontrarán los ficheros correspondiente a los schemas que realizaremos, la otra carpeta será `routers` donde especificamos las operaciones que realizara la base de datos y por último la carpeta `db` que contendra el archivo encargado de establecer la conexión al servidor de MongoDB. Además de estas carpetas src cuenta con un fichero denominado como `index.ts` que será el fichero que defina el esquema y modelo de datos con Mongoose. 
+
+### 2.1.Clase Alimentos. <a name="id21"></a>
+
+Recordemos que Alimentos es una clase más básica para implementar ya que esta va a contener los datos más importantes como el precio, origen, calorias, macronutrientes, grupo, etc... de los alimentos que conformará cada plato.
+
+En la ruta `src/models/alimento.ts` especificamos el esquema que tendrán los diversos alimentos, siendo este:
+
+```Typescript 
+export const macronutrientesSchema = new mongoose.Schema({ carbohidratos: Number, proteinas: Number, lipidos: Number});
+
+export const alimentoSchema = new mongoose.Schema({
+  nombreAlimento: {
+    type: String,
+    required: true,
+    trim: true,
+    validate: (value: string) => {
+      if (!value.match(/^[A-ZñÑ][a-zA-ZñÑ ]*$/)) {
+        throw new Error('El nombre de los alimentos tiene que empezar con una mayúscula y solo pueden estar formados por letras.');
+      }
+    },
+  },
+  precio: {
+    type: Number,
+    required: true,
+    trim: true,
+  },
+  origen: {
+    type: String,
+    required: true,
+    trim: true,
+    validate: (value: string) => {
+      if (!value.match(/^[A-ZñÑ][a-zA-ZñÑ ]*$/)) {
+        throw new Error('El origen de los alimentos tiene que empezar con una mayúscula y solo pueden estar formados por letras.');
+      }
+    },
+  },
+  calorias: {
+    type: Number,
+    required: true,
+    trim: true,
+  },
+  macros: {
+    type: macronutrientesSchema,
+    trim: true,   // permite eliminar espacios al final y al principio de un string
+  },
+  grupo: {
+    type: String,
+    required: true,
+    trim: true,
+    enum: ['CARNES', 'PESCADOS', 'HUEVOS', 'TOFU', 'FRUTOS_SECOS', 'SEMILLAS', 'LEGUMBRES',
+    'VERDURAS', 'HORTALIZAS', 'LACTEOS', 'CEREALES', 'FRUTAS', 'PROCESADOS'],
+  },
+});
+
+export const alimentoModel = mongoose.model<Alimento>('ingredients', alimentoSchema);
+
+```
+
+Donde definimos el esquema de la clase, esto lo hacemos con 
+
+### 2.2.Clase Platos. <a name="id22"></a>
+
+
+
+### 2.3.Clase Menu. <a name="id23"></a>
+
+### 2.4.MongoDB. <a name="id24"></a>
+
+#### 2.4.1.Mongoose. <a name="id241"></a>
+
+
+#### 2.4.2.ThunderClient <a name="id242"></a> (luego veo que hacer con esto)
+
+#### 2.4.3.MongoDB Atlas. <a name="id243"></a> (luego veo que hacer con esto)
+
+#### 2.4.4.Heroku. <a name="id244"></a> (luego veo que hacer con esto)
 
 <br/><br/>
 
@@ -80,14 +163,10 @@ Por último, ha sido nuestro primer contacto con **Inquirer.js** y **Lowdb**. No
 
 <br/><br/>
 
-## 5. Referencias. <a name="id5"></a>
+## 5. Referencias. <a name="id5"></a> (HAY QUE AÑADIR AMS REFERENCIAS PUSE LAS BASICAS)
 1. [Github.](http://github.com)
-2. [Repositorio practica 7](https://github.com/ULL-ESIT-INF-DSI-2021/ull-esit-inf-dsi-20-21-prct07-menu-datamodel-grupo-p)
-   [Repositorio practica 11](https://github.com/ULL-ESIT-INF-DSI-2021/ull-esit-inf-dsi-20-21-prct11-menu-api-grupo-p)
-3. [Enunciado Práctica 11.](https://ull-esit-inf-dsi-2021.github.io/prct11-menu-api/)
-4. [Documentación GitHub Actions](https://docs.github.com/en/actions)
-5. [Documentación Istanbul](https://istanbul.js.org/)
-6. [Documentación Coveralls](https://coveralls.io/)
-7. [Documentación de TypeDoc.](https://typedoc.org/)
-8. [Documentación de Mocha.](https://mochajs.org/)
-9. [Documentación de Chai.](https://www.chaijs.com/)
+2. [Repositorio practica 11](https://github.com/ULL-ESIT-INF-DSI-2021/ull-esit-inf-dsi-20-21-prct11-menu-api-grupo-p)
+3. [Apuntes de clases](https://ull-esit-inf-dsi-2021.github.io/nodejs-theory/)
+4. [Enunciado Práctica 11.](https://ull-esit-inf-dsi-2021.github.io/prct11-menu-api/)
+5. [Documentación MongoDB](https://www.mongodb.com/es)
+6. [Documentación Mongoose](https://mongoosejs.com/)

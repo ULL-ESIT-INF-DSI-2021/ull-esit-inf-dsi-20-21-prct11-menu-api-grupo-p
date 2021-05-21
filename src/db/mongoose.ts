@@ -1,13 +1,14 @@
-import * as mongoose from 'mongoose';
-export const dbURL = 'mongodb://127.0.0.1:27017';
-export const dbName = 'LunaRosa-bbdd';
+import {connect} from 'mongoose';
 
-mongoose.connect(`${dbURL}/${dbName}`, {
+const mongodb_url = process.env.MONGODB_URL || 'mongodb://127.0.0.1:27017/LunaRosa-bbdd';
+
+connect(mongodb_url, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
+  useFindAndModify: false,
 }).then(() => {
-  console.log('Connected to the database.');
+  console.log('Connection to MongoDB server established');
 }).catch(() => {
-  console.log('Something went wrong when conecting to the database.');
+  console.log('Unnable to connect to MongoDB server');
 });
