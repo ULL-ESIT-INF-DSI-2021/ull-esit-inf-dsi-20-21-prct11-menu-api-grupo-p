@@ -108,7 +108,7 @@ export const alimentoModel = mongoose.model<Alimento>('ingredients', alimentoSch
 
 ```
 
-Donde definimos el esquema de la clase, esto lo hacemos con 
+Donde definimos el esquema de la clase, esto es el mecanismo por el cual podemos modelar un objeto en Mongoose. Basicamente con este codigo especificamos que el objeto alimentoSchema defina las cualidades del nombre del ingrediente, el precio , las calorias los macronutrientes que a su vez esta definido por macronutrientesSchema que es 
 
 ### 2.2.Clase Platos. <a name="id22"></a>
 
