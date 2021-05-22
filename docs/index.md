@@ -164,9 +164,53 @@ export class Plato {
   }
   
 ```
-Pero como de la misma forma en la que se implemento `alimento.ts`, necesitaremos hacer uso de los schemas, 
+De esta parte no explicaremos más debido a que es practicamente lo mismo que se realizo en la práctica anterior, por lo que ahora explicaremos el *Schema* utilizado en la clase `Plato`. Este es el encargado de definir el modelo que van a seguir las peticiones de creación de nuevos objetos en la base de datos:
+
+```Typescript
+export const platoSchema = new mongoose.Schema({
+  nombrePlato: {
+    type: String,
+    required: true,
+    trim: true,
+    validate: (value: string) => {
+      if (!value.match(/^[A-ZñÑ][a-zA-ZñÑ ]*$/)) {
+        throw new Error('El nombre del plato tiene que empezar con una mayúscula y solo pueden estar formados por letras.');
+      }
+    },
+  },
+  alimentos: {
+    type: [alimentoSchema],
+    required: true,
+  },
+  categoria: {
+    type: String,
+    required: true,
+    enum: ['ENTRANTE', 'PRIMERO', 'SEGUNDO', 'POSTRE'],
+  },
+  macronutrientes_plato: {
+    type: macronutrientesSchema,
+  },
+});
+```
+
+Como podemos observar, el modelo denominado **platoSchema** define el nombre del `Plato` que tendrá una serie de argumentos:
+- **required**: Especifica que este campo es obligatorio a la hora de crear el modelo.
+- **trim**: Elimina los espacios sobrantes que pueda tener el *string* al principio y/o al final.
+- **validate**: Especifica una expresión regular que obliga a que el nombre del `Plato` empiece por mayúscula obligatoriamente.
+
+Además este modelo especifica también que va a contener de forma obligatoria con el atributo **required** un array de diferentes alimentos. luego, solicita de forma requerida una categoría que deberá de ser entrante, primero, segundo o postre y finalmente,  **macronutrientesSchema** que a su vez es un modelo que define los carbohidratos, lipidos y proteinas.
+
+Finalmente, guardamos el modelo con la sentencia final: 
+
+```Typescript
+export const platoModel = mongoose.model<Plato>('courses', platoSchema);
+```
+
+De esta manera, tenemos en una constante el modelo de `Plato` almacenado.
 
 ### 2.3.Clase Menu. <a name="id23"></a>
+
+
 
 ### 2.4.Routers. <a name="id24"></a>
 
@@ -349,10 +393,14 @@ Al crear un router y declarar los métodos sobre este, lo que hacemos es crear u
 
 ### 2.5.MongoDB. <a name="id25"></a>
 
-MondoDB es una tecnología que nos permite la creación y administr
+MondoDB es una tecnología que nos permite la creación y administración de bases de datos. Su módulo para el código incluye las funciones de conexión y gestión de peticiones relativas a la base de datos.
+
+Tiene una extensión para Visual Studio Code, y es la que hemos usado para poder interactuar con una base de datos a nivel local, pues es mucho más sencillo que desplegar una en la nube.
+
+La tecnología tiene estas dos partes, que juntas suponen una herramienta potente para trabajar con bases de datos.
 
 #### 2.5.1.Mongoose. <a name="id251"></a>
-El módulo de Mongoose nos permite modelar objetos. Con estos conseguimos que nuestros datos puedan ser almacenados en la base de datos de Mongo DB. Se ha definido un squema para los distintos objetos. Se ha creado un macronutrientesSchema, alimentoSchemal, platoSchema y menuSchema. A continuación se muestra como ejemplo el esquema de alimento.
+El módulo de Mongoose nos permite modelar objetos. Con estos conseguimos que nuestros datos puedan ser almacenados en la base de datos de MongoDB. Se ha definido un *Schema* para los distintos objetos. Se ha creado: `macronutrientesSchema`, `alimentoSchemal`, `platoSchema` y `menuSchema`. A continuación se muestra como ejemplo el esquema de `Alimento`.
 
 ```Typescript
 export const alimentoSchema = new mongoose.Schema({
@@ -433,11 +481,15 @@ El *body* de la petición contiene los datos necesarios para que la operación s
 
 #### 2.5.3.MongoDB Atlas. <a name="id253"></a> 
 
-Esta 
+Esta tecnología es el paso lógico de **MongoDB Atlas**. Si la tecnología original era una serie de herramientas en forma de funciones para interactuar con una base de datos, y que hacía una gran pareja con la extensión de VSC que nos permite tener una base de datos local, el siguiente paso es ofrecer este almacenamiento de manera online/en la nube.
+
+**MongoDB Compass es una aplicación externa a Visual Studio Code**, que nos permite crear un *Cluster* a través de la página web de MongoDB Atlas, donde podremos almacenar nuestras bases de datos en la nube. Posteriormente, podremos acceder a este *Cluster* usando la aplicación e indicando la dirección de Atlas. 
+
+De esta manera, tenemos una aplicación que nos permite acceder a la base de datos alojada en la nube y observar los contenidos allí almacenados.
 
 #### 2.5.4.Heroku. <a name="id254"></a> 
 
-Una vez se ha creado el **cluster** que usaremos para almacenar los datos, vamos a utilizar Heroku para desplegar nuestra API REST.
+Una vez se ha creado el **Cluster** que usaremos para almacenar los datos, vamos a utilizar Heroku para desplegar nuestra API REST.
 
 Antes de comenzar propiamente con Heroku es necesario hacer algunos cambios en los ficheros `src/db/mongoose.ts`, ``, 
 
