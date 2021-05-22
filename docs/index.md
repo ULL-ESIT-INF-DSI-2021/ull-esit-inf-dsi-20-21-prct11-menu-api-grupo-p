@@ -31,10 +31,12 @@
       2.5. [MongoDB](#id25)
 
       2.5.1 [Mongoose](#id251)
-      2.5.2 [ThunderClient](#id252)
-      2.5.3 [MongoDB Atlas](#id253)
-      2.5.4 [Heroku](#id254)
 
+      2.5.2 [ThunderClient](#id252)
+
+      2.5.3 [MongoDB Atlas](#id253)
+
+      2.5.4 [Heroku](#id254)
 
       2.6. [Ejemplos para probar con Thunder Client](#id26)
 
@@ -46,7 +48,7 @@
 
 
 
-- [Mongo DB for Node.js]()
+
 
 <br/><br/>
 
@@ -140,8 +142,29 @@ Otra variable con una especie de validado o comprobación es `grupo`, a la cual 
 
 ### 2.2.Clase Platos. <a name="id22"></a>
 
+Recordemos que la clase `plato` esta basada en la clase alimento/ingrediente definida previamente, esta es la encargada de definir el plato en base a los alimentos que lo componen, por ejemplo, si creamos el plato ensalada este estará formado por lechuga, tomate, cebolla, etc.. que son objetos de tipo alimentos.
 
+Si accedemos al fichero en cuestión, se puede observar que esta clase estará compuesta de el nombre del plato `nombrePlato`, un array que contendra todos los alimentos, el precio y la cantidad de estos ingredientes que componen el plato `alimentos` y un type que define la categoría del plato, es decir, si el plato es un entrante, primero, segundo o postre `Categoria`.
 
+```Typescript
+export type Categoria = 'ENTRANTE' | 'PRIMERO' | 'SEGUNDO' | 'POSTRE';
+
+export class Plato {
+  /**
+   * @param nombrePlato Nombre del plato.
+   * @param alimentos Array de pares [alimento, cantidad (en gramos)].
+   * @param categoria Categoría a la que pertenece el plato.
+   */
+  private precio: number = 0;
+  private macronutrientes_plato: Macronutrientes;
+  constructor(private nombrePlato: string, private alimentos: [Alimento, number][],
+    private categoria: Categoria) {
+      this.macronutrientes_plato = this.calculoMacronutrientes();
+      this.precio = this.calculoPrecio();
+  }
+  
+```
+Pero como de la misma forma en la que se implemento `alimento.ts`, necesitaremos hacer uso de los s
 
 ### 2.3.Clase Menu. <a name="id23"></a>
 
@@ -326,6 +349,8 @@ Al crear un router y declarar los métodos sobre este, lo que hacemos es crear u
 
 ### 2.5.MongoDB. <a name="id25"></a>
 
+MondoDB es una tecnología que nos permi
+
 #### 2.5.1.Mongoose. <a name="id251"></a>
 El módulo de Mongoose nos permite modelar objetos. Con estos conseguimos que nuestros datos puedan ser almacenados en la base de datos de Mongo DB. Se ha definido un squema para los distintos objetos. Se ha creado un macronutrientesSchema, alimentoSchemal, platoSchema y menuSchema. A continuación se muestra como ejemplo el esquema de alimento.
 
@@ -377,13 +402,124 @@ export const alimentoSchema = new mongoose.Schema({
 
 #### 2.5.2.ThunderClient <a name="id252"></a> 
 
+**Thunder Client** es una extensión de Visual Studio Code que nos permite interactuar con una API, realizando diferente peticiones a la misma y así poder comprobar su funcionalidad.  
+
+La extensión es simple, clara y directa, y tiene funcionalidades muy interesantes, como crear entornos que almacenan variables o colecciones de comandos donde almacenar plantillas. 
+
+Usando una mezcla de estas funcionalidades es como podemos interactuar con la base de datos, realizando las operaciones CRUD a través de peticiones como la siguiente:
+```
+|POST| {{url}}ingredients
+```
+
+Este código intenta plasmar cómo luce una petición de tipo `Post`, la cual la base de datos interpreta como un intento de insertar un objeto. La variable `url` es una variable del entorno que contiene la dirección de la base de datos. Posteriormente recibe la ruta más concreta con el valor `ingredients`.
+
+```Typescript
+Body:
+{
+    "nombreAlimento": "Arroz blanco",
+    "precio": 1.5,
+    "origen": "España",
+    "calorias": 381,
+    "macros": {
+        "carbohidratos": 86,
+        "proteinas": 7,
+        "lipidos": 0.9
+    },
+    "grupo": "CEREALES"
+}
+```
+
+El *body* de la petición contiene los datos necesarios para que la operación se pueda completar. Para este ejemplo, la petición debe contener todos los datos un objeto de clase `Alimento`, para poder almacenarse en la base de datos. Otras peticiones, por ejemplo, solo necesitan recibir en el *body* una variable con un valor a buscar en la base de datos.
+
 #### 2.5.3.MongoDB Atlas. <a name="id253"></a> 
+
+Esta 
 
 #### 2.5.4.Heroku. <a name="id254"></a> 
 
 Una vez se ha creado el **cluster** que usaremos para almacenar los datos, vamos a utilizar Heroku para desplegar nuestra API REST.
 
-Antes de comenzar propiamente con Heroku es necesario hacer algunos cambios en los ficheros `src/db/mongoose.ts`.
+Antes de comenzar propiamente con Heroku es necesario hacer algunos cambios en los ficheros `src/db/mongoose.ts`, ``, 
+
+```
+import {connect} from 'mongoose';
+
+const mongodb_url = process.env.MONGODB_URL || 'mongodb://127.0.0.1:27017/notes-app';
+
+connect(mongodb_url, {
+  ...
+  ...
+  ...
+```
+
+Con esto estamos indicando que la url puede ser una variable de entorno o, en caso de que esta no sea especificada, usará la especificada en el string.
+
+En el fichero package.json también debemos hacer los siguientes cambios:
+
+```
+...
+...
+  "scripts": {
+    "heroku-postbuild": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsc-watch --onSuccess \"node dist/index.js\""
+  },
+  "engines": {
+    "node": "16.x"
+  },
+...
+...
+```
+
+Se ha de añadir un bloque indicando qué versión de node usará para ejecutar nuestra API. En nuestro caso es la 16. En la sección de scripts debemos crear dos nuevas lineas.
+
+La primera de ella debe llamarse **heroku-postbuild**. En esta indicamos que se debe ejecutar el comando **tsc**. Esta linea necesaria porque debemos compilar nuestro código antes de que Heroku elimine las dependencias de desarrollo.
+
+La siguiente línea **start** indíca el fichero principal de ejecución.
+
+Para la propia instalación de Heroku seguimos los siguientes comandos:
+
+´´´
+...$sudo snap install --classic heroku
+...$heroku login
+
+// Copiamos la clave SSH de ~/.ssh/id_rsa.pub y la añadimos en la pestaña Settings de nuestro perfil.
+
+...$heroku apps:create --region eu dsi-grupop-11
+´´´
+
+El nombre de la aplicación debe ser distinto al de todos los usuarios de Heroku. Una vez ejecutmos ese comando se muestra una URL que será la que necesitaremos para acceder a la API. En nuestro caso la URL ha sido: https://dsi-grupop-11.herokuapp.com/
+
+Antes de desplegar la API debemos indicar la URL de conexión al cluster de MongoDB Atlas. Para ello hacemos uso del comando siguiente:
+
+```
+...$heroku config:set MONGODB_URL=mongodb+srv://notes-app:notesappDSI@cluster0.hcjkr.mongodb.net/LunaRosa-bbdd
+```
+
+Ahora desplegamos la aplicación
+
+```
+...$git push heroku master
+...$heroku logs
+// Si todo ha salido bien debemos obtener un resultado similar al siguiente
+2021-05-22T12:40:05.756237+00:00 heroku[web.1]: Starting process with command `npm start`
+2021-05-22T12:40:06.000000+00:00 app[api]: Build succeeded
+2021-05-22T12:40:09.109884+00:00 app[web.1]: 
+2021-05-22T12:40:09.109915+00:00 app[web.1]: > notes-app@1.0.0 start
+2021-05-22T12:40:09.109916+00:00 app[web.1]: > node dist/index.js
+2021-05-22T12:40:09.109916+00:00 app[web.1]: 
+2021-05-22T12:40:10.100533+00:00 app[web.1]: Server is up on port 14227
+2021-05-22T12:40:10.289254+00:00 heroku[web.1]: State changed from starting to up
+2021-05-22T12:40:10.458330+00:00 app[web.1]: Connection to MongoDB server established
+```
+Hecho esto ya tenemos nuestra API desplegada. Vemos como nuestra API ha sido desplegada en el puerto 14227 (este puerto es dinámico)
+Ahora solo falta comprobar que todo funciona correctamente haciendo uso de ThunderClient. 
+En esta extensión debemos poner la url de conexión, que en nuestro caso era https://dsi-grupop-11.herokuapp.com/ y enviar un ingrediente, por ejemplo.
+
+![Imagen ThunderClient]()
+
+
+![Imagen MongoAtlasDB]()
 
 <br/><br/>
 
@@ -418,24 +554,23 @@ A la hora de desplagar la aplicación con Heroku hemos tenido diversos problemas
 
 ## 4. Conclusión. <a name="id4"></a>
 
-En cuanto a los objetivos especificados en el enunciado de la práctica, se ha cumplido la creación de una API y el manejo de sus datos con los mdulos especificados en el enunciado de la misma.
+En cuanto a los objetivos especificados en el enunciado de la práctica, se ha cumplido la creación de una API y el manejo de sus datos con los modulos especificados en el enunciado de la misma.
 
-De forma mas especifica,  se ha hecho uso de MongoDB, Mongoose para la creación de la Base de datos, además se ha implementado las operaciones CRUD para el manejo de los datos introducidos, se ha utilizado también ThunderClient (completar esto consultar dudas con Oscar). Y finalmente se ha usado Heroku para postear este servicio en la red. Todo ello respetando los principios SOLID(Preguntar) y usando Node.js como entorno para ejecutar el servidor.
-
-(Tengo una duda ya que en la práctica anterior, usamos Mocha y Chai para las pruebas y el testeo, pero en esta no, ¿haria falta introducirla? en caso de que si sería en este párrafo.)
+De forma mas especifica,  se ha hecho uso de **MongoDB**, **Mongoose** para la creación de la Base de datos, además se ha implementado las operaciones **CRUD** para el manejo de los datos introducidos, se ha utilizado también **ThunderClient** para crear las peticiones correspondientes a estas operaciones **CRUD**. Luego, con **MongoDB Atlas** establecemos una base de datos en la nube y finalmente se usa **Heroku** para postear este servicio en la red. Todo ello con **Node.js** como entorno para ejecutar el servicio.
 
 Finalmente, comentar que lo que más nos ha costado a la hora de la implementación es la utilizacióon de **MongoDB**, de **Moongose** y sobretodo de **Heroku**, en gran parte por el desconocimiento de esta tecnología. Sin embargo, hemos aprendido gracias a estas herramientas que:
 
 **MongoDB** nos ha enseñado a crear Menús intuitivos para el usuario, ofreciendo unas opciones fijas y muy claras para el usuario.
 
-**Mongoose** nos permite almacenar los datos de objetos en un fichero JSON para poder leer esos datos más adelante, incluso en otra ejecución desde cero del mismo programa.
+**Mongoose** nos permite comprobar la correcta estructura de los datos de objetos en un fichero JSON para poder leer esos datos más adelante, incluso en otra ejecución desde cero del mismo programa.
 
 <br/><br/>
 
-## 5. Referencias. <a name="id5"></a> (HAY QUE AÑADIR AMS REFERENCIAS PUSE LAS BASICAS)
+## 5. Referencias. <a name="id5"></a> 
 1. [Github.](http://github.com)
 2. [Repositorio practica 11](https://github.com/ULL-ESIT-INF-DSI-2021/ull-esit-inf-dsi-20-21-prct11-menu-api-grupo-p)
 3. [Apuntes de clases](https://ull-esit-inf-dsi-2021.github.io/nodejs-theory/)
 4. [Enunciado Práctica 11.](https://ull-esit-inf-dsi-2021.github.io/prct11-menu-api/)
 5. [Documentación MongoDB](https://www.mongodb.com/es)
 6. [Documentación Mongoose](https://mongoosejs.com/)
+7. [StackOverFlow](https://es.stackoverflow.com/)
