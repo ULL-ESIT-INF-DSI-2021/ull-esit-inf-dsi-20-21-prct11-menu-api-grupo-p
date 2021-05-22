@@ -17,10 +17,15 @@
 2. [Conocimientos Previos](#id2)
       
       2.1. [Clase Alimentos.](#id21)
+      
       2.2. [Clase Plato.](#id22)
+      
       2.3. [Clase Menú](#id23)
+      
       2.4  [Routers](#id24)
+      
       2.5. [Mongoose](#id25)
+      
       2.6. [MongoDB](#id26)
 
 3. [Desarrollo](#id3)
@@ -40,7 +45,9 @@
 
 ## 1. Introducción y objetivos <a name="id1"></a>
 
-El objetivo de esta práctica es implementar de forma grupal una API haciendo uso de **Node/Express**, **Mongoose** y el módulo de **ThunderClient** para crear, eliminar, modificar y leer con las operaciones **CRUD** una serie de ingredientes, menus y platos utilizando para ello los conocimientos adquiridos con la anterior práctica en grupo.
+El objetivo de esta práctica es implementar de forma grupal una API REST haciendo uso de **Node/Express**, **Mongoose** y el módulo de **ThunderClient** para crear, eliminar, modificar y leer con operaciones **CRUD** una serie de ingredientes, menus y platos. Para llevar a cabo esta implementación partimos de los conocimientos y código desarrollado en la anterior práctica grupal. 
+
+Para obtener una explicación más extensa y detallada recomendamos revisar el [guión de la práctica 11](https://ull-esit-inf-dsi-2021.github.io/prct11-menu-api/)
 
 <br/><br/>
 
@@ -311,7 +318,53 @@ Al crear un router y declarar los métodos sobre este, lo que hacemos es crear u
 ### 2.5.MongoDB. <a name="id25"></a>
 
 #### 2.5.1.Mongoose. <a name="id251"></a>
+El módulo de Mongoose nos permite modelar objetos. Con estos conseguimos que nuestros datos puedan ser almacenados en la base de datos de Mongo DB. Se ha definido un squema para los distintos objetos. Se ha creado un macronutrientesSchema, alimentoSchemal, platoSchema y menuSchema. A continuación se muestra como ejemplo el esquema de alimento.
 
+```
+export const alimentoSchema = new mongoose.Schema({
+  nombreAlimento: {
+    type: String,
+    required: true,
+    trim: true,
+    validate: (value: string) => {
+      if (!value.match(/^[A-ZñÑ][a-zA-ZñÑ ]*$/)) {
+        throw new Error('El nombre de los alimentos tiene que empezar con una mayúscula y solo pueden estar formados por letras.');
+      }
+    },
+  },
+  precio: {
+    type: Number,
+    required: true,
+    trim: true,
+  },
+  origen: {
+    type: String,
+    required: true,
+    trim: true,
+    validate: (value: string) => {
+      if (!value.match(/^[A-ZñÑ][a-zA-ZñÑ ]*$/)) {
+        throw new Error('El origen de los alimentos tiene que empezar con una mayúscula y solo pueden estar formados por letras.');
+      }
+    },
+  },
+  calorias: {
+    type: Number,
+    required: true,
+    trim: true,
+  },
+  macros: {
+    type: macronutrientesSchema,
+    trim: true,   // permite eliminar espacios al final y al principio de un string
+  },
+  grupo: {
+    type: String,
+    required: true,
+    trim: true,
+    enum: ['CARNES', 'PESCADOS', 'HUEVOS', 'TOFU', 'FRUTOS_SECOS', 'SEMILLAS', 'LEGUMBRES',
+    'VERDURAS', 'HORTALIZAS', 'LACTEOS', 'CEREALES', 'FRUTAS', 'PROCESADOS'],
+  },
+});
+```
 
 #### 2.5.2.ThunderClient <a name="id252"></a> (luego veo que hacer con esto)
 
@@ -323,10 +376,12 @@ Al crear un router y declarar los métodos sobre este, lo que hacemos es crear u
 
 ## 3. Dificultades. <a name="id3"></a>
 
-EL issue al profesor
-la nomenclatura en el body de la base de datos a la hora de crear datos 
-HEROKU no quiere funcionar 
+Durante el desarrollo de esta práctica hemos sufrido diversos incovenientes, tanto con la implementación como con las herramientas.
 
+**EL issue al profesor
+la nomenclatura en el body de la base de datos a la hora de crear datos** 
+
+A la hora de desplagar la aplicación con Heroku hemos tenido diversos problemas. Tras diversos problemas con la instalación de heroku en la máquina local Windows, hemos podido solventarlo. A la hora de desplegar la aplicación, al heroku realizar el **build**, este nos falla.
 <br/><br/>
 
 ## 4. Conclusión. <a name="id4"></a>
