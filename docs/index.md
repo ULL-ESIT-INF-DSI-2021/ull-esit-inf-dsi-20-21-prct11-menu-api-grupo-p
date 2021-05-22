@@ -46,18 +46,15 @@
 
 5. [Referencias.](#id5)
 
-
-
-
-
-<br/><br/>
-
+***
 
 ## 1. Introducción y objetivos <a name="id1"></a>
 
 El objetivo de esta práctica es implementar de forma grupal una API REST haciendo uso de **Node/Express**, **Mongoose** y el módulo de **ThunderClient** para crear, eliminar, modificar y leer con operaciones **CRUD** una serie de ingredientes, menus y platos. Para llevar a cabo esta implementación partimos de los conocimientos y código desarrollado en la anterior práctica grupal. 
 
 Para obtener una explicación más extensa y detallada recomendamos revisar el [guión de la práctica 11](https://ull-esit-inf-dsi-2021.github.io/prct11-menu-api/)
+
+En el apartado [Ejemplos para probar con Thunder Client](#id26) hemos puesto algunos ejemplos de alimentos, platos, etc. para que, si quiere testear o corregir esta práctica, pueda utilizarlos como ejemplos o guía.
 
 <br/><br/>
 
@@ -130,7 +127,6 @@ Donde definimos el esquema de la clase, esto es el mecanismo por el cual podemos
 
 En la última linea, aplicamos el metodo `model` que va a especificar el esquema que debe seguir los objetos antes de ser insertados en una coleccion de la base de datos.
 
-
 ```Typescript
 export const alimentoModel = mongoose.model<Alimento>('ingredients', alimentoSchema);
 
@@ -164,6 +160,7 @@ export class Plato {
   }
   
 ```
+
 De esta parte no explicaremos más debido a que es practicamente lo mismo que se realizo en la práctica anterior, por lo que ahora explicaremos el *Schema* utilizado en la clase `Plato`. Este es el encargado de definir el modelo que van a seguir las peticiones de creación de nuevos objetos en la base de datos:
 
 ```Typescript
@@ -210,7 +207,47 @@ De esta manera, tenemos en una constante el modelo de `Plato` almacenado.
 
 ### 2.3.Clase Menu. <a name="id23"></a>
 
+Tal y como hicimos en la práctica grupal anterior, un menú debe estar formada mínimo por 3 platos de diferentes categorías, esto lo realizamos con una comprobación al principio. En el constructor de la clase `menu.ts` se define el nombre del menú a traves de un tipo *string*, `primerPlato` es el primer plato del menú y `demasPlatos` es un parámetro de tipo `rest` que almacena el resto de platos.
 
+No entraremos en tantos detalles debido a que está explicado en el informe de la [práctica anterior](https://github.com/ULL-ESIT-INF-DSI-2021/ull-esit-inf-dsi-20-21-prct07-menu-datamodel-grupo-p/blob/master/docs/index.md#id23). 
+
+Como se hizo con los casos anteriores definiremos un modelo de datos para el menú, como este va a estar compuesto por diferentes platos, por ejemplo, para un meú canario podriamos definir como entrante un potaje, ropa vieja como primero, chuleta con papas como segundo y quesillo como postre.  
+
+Por lo que este modelo va a contener un *string* que defina el nombre, denominado `nombreMenu`. Luego, especificamos un array `arrayPlatos` que contendrá todos los platos que componen al menú. 
+
+Por último, tiene un atributo `precio` el cual se debería calcular a través de la suma de los valores de todos los platos del menú. Sin embargo, por falta de tiempo y desconocimiento, no hemos podido implementar esta función. Hemos optado por una medida más directa que es obligar al cliente incluir el precio de manera manual, para suplir esta carencia.
+
+```Typescript
+ const menuSchema = new mongoose.Schema({
+  nombreMenu: {
+    type: String,
+    required: true,
+    trim: true,
+    validate: (value: string) => {
+      if (!value.match(/^[A-ZñÑ][a-zA-ZñÑ ]*$/)) {
+        throw new Error('El nombre de los menús tiene que empezar con una mayúscula y solo pueden estar formados por letras.');
+      }
+    },
+  },
+  arrayPlatos: {
+    type: [platoSchema],
+    required: true,
+    trim: true,
+  },
+  precio: {
+    type: Number,
+    trim: true,
+  }
+});
+```
+
+Finalmente, guardamos el modelo de menú a través del método `model`: 
+
+```Typescript
+export const menuModel = mongoose.model<Menu>('menus', menuSchema);
+```
+
+Como esto es almacenado en una variable denominada `menuModel`, al final lo que va a suceder es que tenemos todo el modelo que define a `Menu` en una variable de tipo `const` que podemos importar en cualquier fichero.
 
 ### 2.4.Routers. <a name="id24"></a>
 
@@ -564,12 +601,12 @@ Ahora desplegamos la aplicación
 2021-05-22T12:40:10.289254+00:00 heroku[web.1]: State changed from starting to up
 2021-05-22T12:40:10.458330+00:00 app[web.1]: Connection to MongoDB server established
 ```
+
 Hecho esto ya tenemos nuestra API desplegada. Vemos como nuestra API ha sido desplegada en el puerto 14227 (este puerto es dinámico)
 Ahora solo falta comprobar que todo funciona correctamente haciendo uso de ThunderClient. 
 En esta extensión debemos poner la url de conexión, que en nuestro caso era https://dsi-grupop-11.herokuapp.com/ y enviar un ingrediente, por ejemplo.
 
 ![Imagen ThunderClient]()
-
 
 ![Imagen MongoAtlasDB]()
 

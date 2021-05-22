@@ -1,0 +1,1 @@
+Este directorio contiene las imagenes del proyecto.
