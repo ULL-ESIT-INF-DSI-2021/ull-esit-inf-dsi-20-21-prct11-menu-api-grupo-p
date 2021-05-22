@@ -374,6 +374,24 @@ export const alimentoSchema = new mongoose.Schema({
 
 <br/><br/>
 
+## Ejemplos de 
+
+El siguiente objeto JSON está creado de tal manera que simplemente necesita copiar y pegar para comprobar el correcto funcionamiento de la práctica.
+
+```
+{
+    "nombreAlimento": "Arroz blanco",
+    "precio": 1.5,
+    "origen": "España",
+    "calorias": 381,
+    "macros": {
+        "carbohidratos": 86,
+        "proteinas": 7,
+        "lipidos": 0.9
+    },
+    "grupo": "CEREALES"
+}
+```
 ## 3. Dificultades. <a name="id3"></a>
 
 Durante el desarrollo de esta práctica hemos sufrido diversos incovenientes, tanto con la implementación como con las herramientas.
