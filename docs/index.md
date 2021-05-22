@@ -164,7 +164,7 @@ export class Plato {
   }
   
 ```
-Pero como de la misma forma en la que se implemento `alimento.ts`, necesitaremos hacer uso de los s
+Pero como de la misma forma en la que se implemento `alimento.ts`, necesitaremos hacer uso de los schemas
 
 ### 2.3.Clase Menu. <a name="id23"></a>
 
@@ -349,7 +349,7 @@ Al crear un router y declarar los métodos sobre este, lo que hacemos es crear u
 
 ### 2.5.MongoDB. <a name="id25"></a>
 
-MondoDB es una tecnología que nos permi
+MondoDB es una tecnología que nos permite la creaci
 
 #### 2.5.1.Mongoose. <a name="id251"></a>
 El módulo de Mongoose nos permite modelar objetos. Con estos conseguimos que nuestros datos puedan ser almacenados en la base de datos de Mongo DB. Se ha definido un squema para los distintos objetos. Se ha creado un macronutrientesSchema, alimentoSchemal, platoSchema y menuSchema. A continuación se muestra como ejemplo el esquema de alimento.
