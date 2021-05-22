@@ -14,7 +14,7 @@
 
 1. [Introducción y objetivos.](#id1)
   
-2. [Conocimientos Previos](#id2)
+2. [Ejercicio](#id2)
       
       2.1. [Clase Alimentos.](#id21)
       
@@ -23,18 +23,26 @@
       2.3. [Clase Menú](#id23)
       
       2.4  [Routers](#id24)
+
+      2.4.1 [Router Default](#id241)
       
-      2.5. [Mongoose](#id25)
+      2.4.2 [Routers Ingredients, Courses and Menus](#id242)
       
-      2.6. [MongoDB](#id26)
+      2.5. [MongoDB](#id25)
 
-3. [Desarrollo](#id3)
+      2.5.1 [Mongoose](#id251)
+      2.5.2 [ThunderClient](#id252)
+      2.5.3 [MongoDB Atlas](#id253)
+      2.5.4 [Heroku](#id254)
 
-4. [Dificultades](#id4)
 
-5. [Conclusión.](#id5)
+      2.6. [Ejemplos para probar con Thunder Client](#id26)
 
-6. [Referencias.](#id6)
+3. [Dificultades](#id3)
+
+4. [Conclusión.](#id4)
+
+5. [Referencias.](#id5)
 
 
 
@@ -131,6 +139,7 @@ Un detalle importante para los atributos de `nombreAlimento` y `origen` es que t
 Otra variable con una especie de validado o comprobación es `grupo`, a la cual especificamos un *enum* con los diferentes grupos/categorías de alimentos que están aceptados. 
 
 ### 2.2.Clase Platos. <a name="id22"></a>
+
 
 
 
@@ -320,7 +329,7 @@ Al crear un router y declarar los métodos sobre este, lo que hacemos es crear u
 #### 2.5.1.Mongoose. <a name="id251"></a>
 El módulo de Mongoose nos permite modelar objetos. Con estos conseguimos que nuestros datos puedan ser almacenados en la base de datos de Mongo DB. Se ha definido un squema para los distintos objetos. Se ha creado un macronutrientesSchema, alimentoSchemal, platoSchema y menuSchema. A continuación se muestra como ejemplo el esquema de alimento.
 
-```
+```Typescript
 export const alimentoSchema = new mongoose.Schema({
   nombreAlimento: {
     type: String,
@@ -366,15 +375,19 @@ export const alimentoSchema = new mongoose.Schema({
 });
 ```
 
-#### 2.5.2.ThunderClient <a name="id252"></a> (luego veo que hacer con esto)
+#### 2.5.2.ThunderClient <a name="id252"></a> 
 
-#### 2.5.3.MongoDB Atlas. <a name="id253"></a> (luego veo que hacer con esto)
+#### 2.5.3.MongoDB Atlas. <a name="id253"></a> 
 
-#### 2.5.4.Heroku. <a name="id254"></a> (luego veo que hacer con esto)
+#### 2.5.4.Heroku. <a name="id254"></a> 
+
+Una vez se ha creado el **cluster** que usaremos para almacenar los datos, vamos a utilizar Heroku para desplegar nuestra API REST.
+
+Antes de comenzar propiamente con Heroku es necesario hacer algunos cambios en los ficheros `src/db/mongoose.ts`.
 
 <br/><br/>
 
-## Ejemplos de 
+### 2.6.Ejemplos para probar con Thunder Client <a name="id26"></a>
 
 El siguiente objeto JSON está creado de tal manera que simplemente necesita copiar y pegar para comprobar el correcto funcionamiento de la práctica.
 
@@ -399,18 +412,19 @@ Durante el desarrollo de esta práctica hemos sufrido diversos incovenientes, ta
 **EL issue al profesor
 la nomenclatura en el body de la base de datos a la hora de crear datos** 
 
-A la hora de desplagar la aplicación con Heroku hemos tenido diversos problemas. Tras diversos problemas con la instalación de heroku en la máquina local Windows, hemos podido solventarlo. A la hora de desplegar la aplicación, al heroku realizar el **build**, este nos falla.
+A la hora de desplagar la aplicación con Heroku hemos tenido diversos problemas. Tras diversos problemas con la instalación de heroku en la máquina local Windows, hemos podido solventarlo. A la hora de desplegar la aplicación, al heroku realizar el **build**, este nos fallaba. Finalmente, para solventar el problema, decidimos hacer una instalación limpia en una máquina aparte. Realizamos toda la instalación en una VM con Ubuntu, revisamos el fichero package.json y, además, eliminamos el directorio node_module (para que el propio Heroku se encargara de generarla. Siguiendo estos pasos hemos logrado que la aplicacion se desplegara correctamente.
+
 <br/><br/>
 
 ## 4. Conclusión. <a name="id4"></a>
 
-Los objetivos que hemos cumplido satisfactoriamente sobre esta práctica han sido: crear una API, estructura de Menú usando los módulos Inquirer.js y Lowdb sobre un grupo de objetos en Typescript.
+En cuanto a los objetivos especificados en el enunciado de la práctica, se ha cumplido la creación de una API y el manejo de sus datos con los mdulos especificados en el enunciado de la misma.
 
-Es decir, hemos aplicado un buen diseño de las clases solicitadas en el guión y respetando los principios SOLID. Con ello, conseguimos que la información que contiene cada clase esté bien ordenada y tenga sentido, en un entorno práctico.
+De forma mas especifica,  se ha hecho uso de MongoDB, Mongoose para la creación de la Base de datos, además se ha implementado las operaciones CRUD para el manejo de los datos introducidos, se ha utilizado también ThunderClient (completar esto consultar dudas con Oscar). Y finalmente se ha usado Heroku para postear este servicio en la red. Todo ello respetando los principios SOLID(Preguntar) y usando Node.js como entorno para ejecutar el servidor.
 
-Hemos realizado las pruebas según la metodología TDD: primero creando las funciones para que fallen, y después completarlas hasta que supongamos que funcionen. Con este prueba y error en el que comparamos los resultados con los objetos instanciados dentro del fichero de pruebas, nos ha hecho adoptar un modelo y metodología que creemos correcta para TDD.
+(Tengo una duda ya que en la práctica anterior, usamos Mocha y Chai para las pruebas y el testeo, pero en esta no, ¿haria falta introducirla? en caso de que si sería en este párrafo.)
 
-Por último, ha sido nuestro primer contacto con **Inquirer.js** y **Lowdb**. Nos ha costado hacer que los ejemplos no den errores de compilación y que nuestras implementaciones funcionen correctamente.
+Finalmente, comentar que lo que más nos ha costado a la hora de la implementación es la utilizacióon de **MongoDB**, de **Moongose** y sobretodo de **Heroku**, en gran parte por el desconocimiento de esta tecnología. Sin embargo, hemos aprendido gracias a estas herramientas que:
 
 **MongoDB** nos ha enseñado a crear Menús intuitivos para el usuario, ofreciendo unas opciones fijas y muy claras para el usuario.
 
