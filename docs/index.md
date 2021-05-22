@@ -606,9 +606,9 @@ Hecho esto ya tenemos nuestra API desplegada. Vemos como nuestra API ha sido des
 Ahora solo falta comprobar que todo funciona correctamente haciendo uso de ThunderClient. 
 En esta extensión debemos poner la url de conexión, que en nuestro caso era https://dsi-grupop-11.herokuapp.com/ y enviar un ingrediente, por ejemplo.
 
-![Imagen ThunderClient]()
+![Imagen ThunderClient](img/DSI_ThunderClient_Heroku.PNG)
 
-![Imagen MongoAtlasDB]()
+![Imagen MongoAtlasDB](img/DSI_MongoDBAtlas_Heroku.PNG)
 
 <br/><br/>
 
