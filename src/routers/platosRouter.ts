@@ -59,6 +59,26 @@ platoRouter.patch('/courses/:id', async (req, res) => {
 
 // para crearlos, post o put
 platoRouter.post('/courses', async (req, res) => {
+  const ingredi = req.body.alimentos;
+  let precioFinal: number = 0;
+  let carbostotales: number = 0;
+  let proteinastotales: number = 0;
+  let lipidostotales: number = 0;
+  for (var i in ingredi){
+    precioFinal += ingredi[i].precio;
+    carbostotales += ingredi[i].macros.carbohidratos;
+    proteinastotales += ingredi[i].macros.proteinas;
+    lipidostotales += ingredi[i].macros.lipidos;
+  }
+  
+  req.body.precio = precioFinal;
+
+  req.body.macronutrientes_plato = {
+    "carbohidratos": carbostotales, 
+    "proteinas": proteinastotales,
+    "lipidos": lipidostotales
+  }
+  
   const Plato = new platoModel(req.body);
   try {
     await Plato.save();

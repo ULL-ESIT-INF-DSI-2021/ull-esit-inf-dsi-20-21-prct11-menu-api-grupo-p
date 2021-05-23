@@ -31,6 +31,34 @@ menuRouter.get('/menus/:id', async (req, res) => {
 
 // para crearlos, post o put
 menuRouter.post('/menus', async (req, res) => {
+  const platosAux = req.body.arrayPlatos;
+  let precioFinal: number = 0;
+  let carbostotales: number = 0;
+  let proteinastotales: number = 0;
+  let lipidostotales: number = 0;
+
+  for(var i in platosAux){
+    const ingrediAux = platosAux[i].alimentos;
+    for (var i in ingrediAux){
+      precioFinal += ingrediAux[i].precio;
+      console.log('Precio nuevo ' + ingrediAux[i].precio);
+      console.log('Precio total ' + precioFinal);
+      // carbostotales += ingrediAux[i].macros.carbohidratos;
+      // proteinastotales += ingrediAux[i].macros.proteinas;
+      // lipidostotales += ingrediAux[i].macros.lipidos;
+    }
+  }
+
+  req.body.precio = +(precioFinal.toFixed(2));
+
+  /*
+  req.body.macronutrientes_plato = {
+    "carbohidratos": carbostotales, 
+    "proteinas": proteinastotales,
+    "lipidos": lipidostotales
+  }
+  */
+  
   const menu = new menuModel(req.body);
   try {
     await menu.save();
