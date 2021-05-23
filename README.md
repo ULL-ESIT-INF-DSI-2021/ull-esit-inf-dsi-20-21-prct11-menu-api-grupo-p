@@ -2,6 +2,8 @@
 
 [Acceso a la Github Page](https://ull-esit-inf-dsi-2021.github.io/ull-esit-inf-dsi-20-21-prct11-menu-api-grupo-p/)
 
+[Acceso al video explicativo](https://youtu.be/4w9yn3Sn6zY)
+
 * Universidad de La Laguna
 * Grado en Ingeniería Informática
 * Asignatura: Desarrollo de sistemas informáticos
