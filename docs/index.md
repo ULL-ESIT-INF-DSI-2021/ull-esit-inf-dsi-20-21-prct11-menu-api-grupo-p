@@ -1,14 +1,15 @@
 # Práctica 11 - API Node/Express de gestión de información nutricional
 
-<br/><br/>
+<br/>
 
+***
 ### Hecho por:  
   * Óscar Cigala Álvarez - alu0101038230@ull.edu.es
   * Óscar Ignacio Pozo Fernandez - alu0101036526@ull.edu.es
   * Eduardo Da Silva Yanes - alu0101104911@ull.edu.es
   * Joel Francisco Escobar Socas - alu0101130408@ull.edu.es
 
-<br/><br/>
+***
 
 ### Índice:
 
@@ -47,6 +48,7 @@
 5. [Referencias.](#id5)
 
 ***
+<br/>
 
 ## 1. Introducción y objetivos. <a name="id1"></a>
 
@@ -56,6 +58,7 @@ Para obtener una explicación más extensa y detallada recomendamos revisar el [
 
 En el apartado [Ejemplos para probar con Thunder Client](#id26) hemos puesto algunos ejemplos de alimentos, platos, etc. para que, si quiere testear o corregir esta práctica, pueda utilizarlos como ejemplos o guía.
 
+Así mismo, se ha realizado un [video explicativo](https://youtu.be/4w9yn3Sn6zY) del proceso de creación y funcionamiento de la práctica.
 <br/><br/>
 
 ## 2. Ejercicio. <a name="id2"></a>
@@ -656,7 +659,7 @@ Ahora, desplegamos la aplicación:
 ```
 
 Hecho esto, ya tenemos nuestra API desplegada. Vemos como nuestra API ha sido desplegada en el puerto 14227 (este puerto es dinámico). Ahora solo falta comprobar que todo funciona correctamente haciendo uso de ThunderClient. 
-En esta extensión debemos poner la url de conexión, que en nuestro caso era https://dsi-grupop-11.herokuapp.com/ y enviar un ingrediente, por ejemplo.
+En esta extensión debemos poner la url de conexión, que en nuestro caso es https://dsi-grupop-11.herokuapp.com/ y enviar un ingrediente. A continuación un ejemplo.
 
 ![Imagen ThunderClient](img/DSI_ThunderClient_Heroku.PNG)
 
@@ -666,8 +669,9 @@ En esta extensión debemos poner la url de conexión, que en nuestro caso era ht
 
 ### 2.6. Ejemplos para probar con Thunder Client. <a name="id26"></a>
 
-El siguiente objeto JSON está creado de tal manera que simplemente necesita copiar y pegar para comprobar el correcto funcionamiento de la práctica.
+Los siguientes ejemplos ha sido creados de tal manera que simplemente necesita copiar y pegar para comprobar el correcto funcionamiento de la práctica.
 
+**Ejemplo de ingrediente**
 ```
 {
     "nombreAlimento": "Arroz blanco",
@@ -680,6 +684,185 @@ El siguiente objeto JSON está creado de tal manera que simplemente necesita cop
         "lipidos": 0.9
     },
     "grupo": "CEREALES"
+}
+```
+
+```
+{
+ "nombreAlimento": "Chuleta de cerdo",
+ "precio": 3,
+ "origen": "España",
+ "calorias": 327,
+ "macros": {
+     "carbohidratos": 0,
+     "proteinas": 15.4,
+     "lipidos": 29.5
+ },
+ "grupo": "CARNES"
+}
+```
+
+**Ejemplo de plato**
+```
+{
+ "nombrePlato": "Chuleta de cerdo con papas",
+ "alimentos": [
+    {
+        "nombreAlimento": "Papas",
+        "precio": 1.13,
+        "origen": "Canarias",
+        "calorias": 115,
+        "macros": {
+          "carbohidratos": 22.8,
+          "proteinas": 2.3,
+          "lipidos": 0.1
+        },
+        "grupo": "HORTALIZAS"
+    },
+    {
+        "nombreAlimento": "Chuleta de cerdo",
+        "precio": 3,
+        "origen": "España",
+        "calorias": 327,
+        "macros": {
+          "carbohidratos": 0,
+          "proteinas": 15.4,
+          "lipidos": 29.5
+        },
+        "grupo": "CARNES"
+    }
+ ],
+ "categoria": "SEGUNDO"
+}
+```
+
+**Ejemplo de menu**
+```
+{
+    "nombreMenu": "Menu carnivoro",
+    "arrayPlatos": 
+    [
+      {
+        "nombrePlato": "Nuggets de pollo",
+        "alimentos": [
+          {
+            "nombreAlimento": "Pollo",
+            "precio": 2.18,
+            "origen": "Brasil",
+            "calorias": 167,
+            "macros": {
+              "carbohidratos": 0,
+              "proteinas": 20,
+              "lipidos": 9.7
+            },
+            "grupo": "CARNES"
+          },
+          {
+            "nombreAlimento": "Pan rallado",
+            "precio": 1.51,
+            "origen": "La Palma",
+            "calorias": 227,
+            "macros": {
+              "carbohidratos": 58,
+              "proteinas": 7.8,
+              "lipidos": 1
+            },
+            "grupo": "CEREALES"
+          }
+        ],
+        "categoria": "PRIMERO"
+      },
+      {
+        "nombrePlato": "Papas deluxe",
+        "alimentos": [
+          {
+            "nombreAlimento": "Papas",
+            "precio": 1.13,
+            "origen": "Canarias",
+            "calorias": 115,
+            "macros": {
+              "carbohidratos": 22.8,
+              "proteinas": 2.3,
+              "lipidos": 0.1
+            },
+            "grupo": "HORTALIZAS"
+          },
+          {
+            "nombreAlimento": "Pan rallado",
+            "precio": 1.51,
+            "origen": "La Palma",
+            "calorias": 227,
+            "macros": {
+              "carbohidratos": 58,
+              "proteinas": 7.8,
+              "lipidos": 1
+            },
+            "grupo": "CEREALES"
+          }
+        ],
+        "categoria": "ENTRANTE"
+      },
+      {
+        "nombrePlato": "Chuleta de cerdo con papas",
+        "alimentos": [
+          {
+            "nombreAlimento": "Papas",
+            "precio": 1.13,
+            "origen": "Canarias",
+            "calorias": 115,
+            "macros": {
+              "carbohidratos": 22.8,
+              "proteinas": 2.3,
+              "lipidos": 0.1
+            },
+            "grupo": "HORTALIZAS"
+          },
+          {
+            "nombreAlimento": "Chuleta de cerdo",
+            "precio": 3,
+            "origen": "España",
+            "calorias": 327,
+            "macros": {
+              "carbohidratos": 0,
+              "proteinas": 15.4,
+              "lipidos": 29.5
+            },
+            "grupo": "CARNES"
+          }
+        ],
+        "categoria": "SEGUNDO"
+      },
+      {
+        "nombrePlato": "Helado de coco",
+        "alimentos": [
+          {
+            "nombreAlimento": "Leche entera",
+            "precio": 0.79,
+            "origen": "Asturias",
+            "calorias": 63,
+            "macros": {
+              "carbohidratos": 4.7,
+              "proteinas": 3.1,
+              "lipidos": 3.5
+            },
+            "grupo": "LACTEOS"
+          },
+          {
+            "nombreAlimento": "Leche de coco",
+            "precio": 5.24,
+            "origen": "Tailandia",
+            "calorias": 241,
+            "macros": {
+              "carbohidratos": 3.3,
+              "proteinas": 2.3,
+              "lipidos": 23.8
+            },
+            "grupo": "FRUTAS"
+          }
+        ],
+        "categoria": "POSTRE"
+      }
+    ]
 }
 ```
 
